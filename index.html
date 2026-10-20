@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AgenticSaaS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: left-aligned rows that alternate copy and video, each clip framed like a window onto the product. */
+:root {
+  --bg: #0B1020;
+  --bg-2: #0F1630;
+  --line: rgba(255,255,255,.10);
+  --fg: #F2F4FB;
+  --muted: #9AA3C0;
+  --violet: #7C5CFF;
+  --cyan: #22D3EE;
+  --green: #34D399;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+
+/* nav */
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; flex-wrap: wrap; }
+.brand { font-weight: 800; font-size: 19px; letter-spacing: -.01em; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, var(--violet), #5B3FE0); display: inline-grid; place-items: center; box-shadow: 0 0 18px rgba(124,92,255,.55); }
+.brand-mark i { width: 10px; height: 8px; border: 2px solid #fff; border-radius: 3px; display: block; }
+.nav-links { display: flex; align-items: center; gap: 28px; font-size: 15px; color: var(--muted); }
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { color: var(--fg); }
+@media (max-width: 720px) { .nav-links .hide-sm { display: none; } }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; font: 600 16px/1 var(--font-body); padding: 14px 22px; border-radius: 10px; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+.btn-primary { background: linear-gradient(120deg, var(--violet), #5E7BFF 60%, var(--cyan)); color: #fff; box-shadow: 0 8px 30px -8px rgba(124,92,255,.7); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-ghost { border-color: var(--line); color: var(--fg); background: rgba(255,255,255,.03); }
+.btn-ghost:hover { background: rgba(255,255,255,.07); }
+.btn-sm { padding: 10px 16px; font-size: 14px; }
+.btn:focus-visible, a:focus-visible, .replay:focus-visible, video:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+/* shared type */
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); margin: 0 0 18px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; letter-spacing: -.02em; line-height: 1.08; }
+h1 { font-size: clamp(40px, 6vw, 68px); font-weight: 800; }
+h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 700; }
+h3 { font-size: 20px; font-weight: 650; letter-spacing: -.01em; line-height: 1.25; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: clamp(17px, 1.6vw, 19.5px); max-width: 52ch; }
+
+/* hero */
+.hero { position: relative; padding-block: 36px 88px; }
+.hero::before { content: ""; position: absolute; inset: -80px 0 auto; height: 640px; background:
+  radial-gradient(600px 360px at 18% 30%, rgba(124,92,255,.28), transparent 70%),
+  radial-gradient(560px 340px at 82% 55%, rgba(34,211,238,.16), transparent 70%); pointer-events: none; z-index: 0; }
+.hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 56px; align-items: center; }
+.hero-copy { display: flex; flex-direction: column; gap: 26px; align-items: flex-start; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.channels { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); letter-spacing: .04em; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.channels span::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 8px; vertical-align: 1px; }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; } .hero { padding-bottom: 64px; } }
+
+/* video frames */
+.frame { position: relative; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--bg-2); aspect-ratio: 16 / 9; max-width: 100%; box-shadow: 0 30px 80px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02) inset; }
+.frame video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.replay { position: absolute; right: 12px; bottom: 12px; display: none; align-items: center; gap: 8px; font: 600 13px/1 var(--font-body); color: var(--fg); background: rgba(11,16,32,.78); border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; cursor: pointer; backdrop-filter: blur(6px); }
+.replay.show { display: inline-flex; }
+.cap { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; margin-top: 12px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cap b { font-weight: 500; color: var(--cyan); }
+
+/* rows */
+section { padding-block: 72px; border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 56px; align-items: center; }
+.row.flip { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+.row.flip .copy { order: 2; }
+.copy { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.points { list-style: none; padding: 0; margin: 6px 0 0; display: flex; flex-direction: column; gap: 10px; color: var(--fg); font-size: 16px; }
+.points li { display: flex; gap: 12px; align-items: baseline; }
+.points li::before { content: ""; flex: none; width: 14px; height: 2px; background: var(--cyan); transform: translateY(-4px); }
+.note { font-size: 13.5px; color: var(--muted); }
+@media (max-width: 900px) {
+  .row, .row.flip { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .row.flip .copy { order: 0; }
+  section { padding-block: 56px; }
+}
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 40px; }
+.step { display: flex; flex-direction: column; gap: 10px; }
+.step .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: var(--violet); }
+.step:nth-child(2) .k { color: var(--cyan); }
+.step:nth-child(3) .k { color: var(--green); }
+.step p { color: var(--muted); font-size: 16px; }
+.how-head { display: flex; flex-direction: column; gap: 16px; max-width: 640px; margin-bottom: 36px; }
+@media (max-width: 760px) { .steps { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+
+/* pair */
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-top: 36px; }
+.pair article { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.pair h3 { margin-bottom: 10px; }
+@media (max-width: 860px) { .pair { grid-template-columns: minmax(0, 1fr); gap: 48px; } }
+
+/* book */
+.book { background: linear-gradient(180deg, rgba(124,92,255,.07), transparent); border-radius: 18px; border: 1px solid var(--line); padding: clamp(24px, 4vw, 48px); }
+section.book-sec { border-top: 0; padding-block: 24px 80px; }
+footer { border-top: 1px solid var(--line); padding-block: 28px 44px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--fg); }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="nav">
+    <a class="brand" href="#top"><span class="brand-mark"><i></i></span>AgenticSaaS</a>
+    <nav class="nav-links" aria-label="Main">
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#results">Results</a>
+      <a class="hide-sm" href="#connect">Integrations</a>
+      <a class="btn btn-ghost btn-sm" href="#book">Book a demo</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" style="margin:0">AI support agent</p>
+          <h1>Support that never sleeps.</h1>
+          <p class="lede">AgenticSaaS puts an AI agent on your inbox, chat and help desk. It learns from your docs, answers customers and closes tickets around the clock.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#book" data-booking>Book a demo</a>
+            <a class="btn btn-ghost" href="#how">See how it works</a>
+          </div>
+          <div class="channels" aria-label="Channels"><span>Email</span><span>Chat</span><span>Help desk</span></div>
+        </div>
+        <div>
+          <div class="frame">
+            <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/01_hero_agent_network.jpg" aria-label="The AI agent connected to your inbox, knowledge base and actions">
+              <source src="assets/video/01_hero_agent_network.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="demo">
+      <div class="row">
+        <div class="copy">
+          <p class="eyebrow">Live conversation</p>
+          <h2>A ticket closes in the time it takes to read it.</h2>
+          <p class="lede">A customer asks where their order is, then wants to change the delivery address. The agent checks, answers and makes the change in the same thread.</p>
+          <ul class="points">
+            <li>Looks up orders and tracking</li>
+            <li>Updates details without a handoff</li>
+            <li>Marks the ticket resolved</li>
+          </ul>
+        </div>
+        <div>
+          <div class="frame">
+            <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/03_instant_resolution_demo.jpg" aria-label="Example chat where the agent resolves an order question in 12 seconds">
+              <source src="assets/video/03_instant_resolution_demo.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="cap"><span>Example conversation</span><b>Resolved in 12 seconds</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="always-on">
+      <div class="row flip">
+        <div>
+          <div class="frame">
+            <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/02_always_on_support.jpg" aria-label="Chat panel answering order, refund and password questions">
+              <source src="assets/video/02_always_on_support.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="cap"><span>Order, refund, password reset</span><b>24/7</b></div>
+        </div>
+        <div class="copy">
+          <p class="eyebrow">Always on</p>
+          <h2>The 3 a.m. questions get 3 a.m. answers.</h2>
+          <p class="lede">Tracking, refunds and password resets make up most of a busy queue. The agent handles them at any hour, so your team starts the day on the hard cases.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="how-head">
+        <p class="eyebrow">How it works</p>
+        <h2>Connect, train, resolve.</h2>
+        <p class="lede">Set up takes three steps, and your existing tools stay where they are.</p>
+      </div>
+      <div class="frame">
+        <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/04_how_it_works_flow.jpg" aria-label="Three steps: connect, train, resolve">
+          <source src="assets/video/04_how_it_works_flow.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="k">STEP 01</span><h3>Connect</h3><p>Link email, chat and your help desk so every request lands in one place.</p></div>
+        <div class="step"><span class="k">STEP 02</span><h3>Train</h3><p>Point the agent at your docs. They become its knowledge.</p></div>
+        <div class="step"><span class="k">STEP 03</span><h3>Resolve</h3><p>Tickets the agent can answer are closed automatically. The rest go to your team.</p></div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="row">
+        <div class="copy">
+          <p class="eyebrow">Where every ticket goes</p>
+          <h2>Most tickets never reach your team.</h2>
+          <p class="lede">The agent resolves what it can, hands off what it can't, and schedules a follow-up when someone needs to check back. Replies arrive in seconds, at any hour.</p>
+          <p class="note">Illustrative split shown. Your results depend on your docs and ticket mix.</p>
+        </div>
+        <div>
+          <div class="frame">
+            <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/05_results_metrics.jpg" aria-label="Chart: 80% auto-resolved, 15% escalated, 5% follow-up scheduled">
+              <source src="assets/video/05_results_metrics.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="cap"><span>Example ticket outcomes</span><b>Under 5s response</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="connect">
+      <div class="how-head" style="margin-bottom:0">
+        <p class="eyebrow">In your stack</p>
+        <h2>Works with the tools you already use.</h2>
+      </div>
+      <div class="pair">
+        <article>
+          <h3>Connect in one click</h3>
+          <div class="frame">
+            <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/06_integrations_connections.jpg" aria-label="The agent connecting to email, Slack, help desk, store, payments and WhatsApp">
+              <source src="assets/video/06_integrations_connections.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="cap"><span>Email · Slack · Help desk · Store · Payments · WhatsApp</span></div>
+        </article>
+        <article>
+          <h3>From backlog to breathing room</h3>
+          <div class="frame">
+            <video data-mode="once" muted playsinline preload="metadata" poster="assets/poster/07_before_after_backlog.jpg" aria-label="A queue of 247 open tickets cleared down to 12">
+              <source src="assets/video/07_before_after_backlog.mp4" type="video/mp4">
+            </video>
+            <button class="replay" type="button" aria-label="Replay animation">Replay</button>
+          </div>
+          <div class="cap"><span>Example: 247 open tickets</span><b>235 resolved</b></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="book-sec" id="book">
+      <div class="book">
+        <div class="row flip">
+          <div>
+            <div class="frame">
+              <video data-mode="loop" muted playsinline preload="metadata" poster="assets/poster/08_cta_book_a_demo.jpg" aria-label="Meet your AI support agent: book a demo, live in minutes, no code required">
+                <source src="assets/video/08_cta_book_a_demo.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="copy">
+            <p class="eyebrow">Get started</p>
+            <h2>Meet your AI support agent.</h2>
+            <p class="lede">Live in minutes. No code required. Book a demo and watch it answer your own customers' questions.</p>
+            <a class="btn btn-primary" href="#book" data-booking>Book a demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>&copy; AgenticSaaS</span>
+    <a href="#top">Back to top</a>
+  </footer>
+</div>
+
+<script>
+/* Set this to your booking page (Calendly, Cal.com, a contact form...). */
+var BOOKING_URL = "";
+
+(function () {
+  if (BOOKING_URL) {
+    document.querySelectorAll("[data-booking]").forEach(function (a) {
+      a.setAttribute("href", BOOKING_URL);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener");
+    });
+  }
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var vids = Array.prototype.slice.call(document.querySelectorAll("video"));
+
+  vids.forEach(function (v) {
+    var loop = v.getAttribute("data-mode") === "loop";
+    v.loop = loop;
+    if (reduce) { v.controls = true; return; }
+
+    var btn = v.parentNode.querySelector(".replay");
+    if (btn) {
+      v.addEventListener("ended", function () { btn.classList.add("show"); });
+      btn.addEventListener("click", function () {
+        btn.classList.remove("show");
+        v.currentTime = 0;
+        var p = v.play(); if (p && p.catch) p.catch(function () {});
+      });
+    }
+  });
+
+  if (reduce || !("IntersectionObserver" in window)) return;
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var v = e.target;
+      var once = v.getAttribute("data-mode") === "once";
+      if (e.isIntersecting) {
+        if (once && v.dataset.played === "1") return;
+        if (once) v.dataset.played = "1";
+        var p = v.play(); if (p && p.catch) p.catch(function () {});
+      } else if (!once) {
+        v.pause();
+      }
+    });
+  }, { threshold: 0.35 });
+
+  vids.forEach(function (v) { io.observe(v); });
+})();
+</script>
+
+</body>
+</html>
